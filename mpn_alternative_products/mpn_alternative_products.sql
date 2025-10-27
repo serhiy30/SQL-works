@@ -85,7 +85,7 @@ SELECT
 FROM main.inventory.data.mpn_product pr
 
 -- Join to get manufacturer name
-INNER JOIN main.inventory.data.xcart_manufacturers br
+INNER JOIN main.inventory.data.manufacturers br
     ON pr.manufacturer_id = br.manufacturerid
 
 -- Join to map MPN to internal product ID
@@ -143,15 +143,21 @@ INNER JOIN (
         sh.name AS Vendor_name,
         sh.shipping_price,
         sh.shipping_cost
+    
     FROM main.inventory.data.mpn_product pr
-    INNER JOIN main.inventory.data.xcart_manufacturers br ON pr.manufacturer_id = br.manufacturerid
-    INNER JOIN main.inventory.data.mpn_id_to_product_id id ON pr.id = id.mpn_id
-    INNER JOIN main.inventory.data.mpn_product_extra_data orig ON pr.id = orig.mpn_product_id
-    INNER JOIN main.inventory.data.oe_part_to_product oep ON oep.product_id = id.product_id
-    INNER JOIN main.inventory.data.oe_part oes ON oes.id = oep.oe_part_id
-    INNER JOIN main.products.product product
-        ON product.manufacturer_id = pr.manufacturer_id
-        AND product.mpn = pr.sku
+        INNER JOIN main.inventory.data.manufacturers br 
+            ON pr.manufacturer_id = br.manufacturerid
+        INNER JOIN main.inventory.data.mpn_id_to_product_id id 
+            ON pr.id = id.mpn_id
+        INNER JOIN main.inventory.data.mpn_product_extra_data orig 
+            ON pr.id = orig.mpn_product_id
+        INNER JOIN main.inventory.data.oe_part_to_product oep 
+            ON oep.product_id = id.product_id
+        INNER JOIN main.inventory.data.oe_part oes 
+            ON oes.id = oep.oe_part_id
+        INNER JOIN main.products.product product
+            ON product.manufacturer_id = pr.manufacturer_id
+            AND product.mpn = pr.sku
     INNER JOIN (
         SELECT 
             s.product_id,
@@ -159,8 +165,10 @@ INNER JOIN (
             s.shipping_price,
             s.shipping_cost,
             v.name
-        FROM main.products.product_calculated_shipping s
-        INNER JOIN main.products.vendor v ON s.vendor_id = v.id
+        FROM main.products.product_calculated_shipping AS s
+    
+        INNER JOIN main.products.vendor v 
+            ON s.vendor_id = v.id
         WHERE s.shipping_zone_id = 1
     ) AS sh
         ON product.id = sh.product_id
