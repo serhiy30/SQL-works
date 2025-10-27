@@ -4,7 +4,6 @@
 -- Written for Databricks (Spark SQL)
 -- ===========================================
 
-
 SELECT
  Tempo.Year,
  Tempo.Month,
@@ -145,7 +144,6 @@ WHERE
 GROUP BY Month, Year, START_DATE, TEMPO_Author_ID, ji.ASSIGNEE, tmp.ISSUEID, jit.ISSUETYPE, Epic_ID, Epic_SUMMARY, ji.ISSUETYPE, Task_ID, Task_SUMMARY, Sub_task_ID, 
  Sub_task_SUMMARY, tmp.AUTHORACCOUNTID, TIMESPENTHRS, TIMESPENTSECONDS, tmp.DESCRIPTION, tmp.TEMPOWORKLOGID, Expense_Type_1, Expense_Type_2, Expense_Type_3
 ORDER BY TEMPO_Author_ID) As Tempo
-
 
 GROUP BY 
  Tempo.Month,
